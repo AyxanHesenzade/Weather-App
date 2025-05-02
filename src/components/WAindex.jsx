@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import { Button, ConfigProvider, Flex } from 'antd';
+import {  Input } from 'antd';
+
+
 
 function WAindex() {
   const [city, setCity] = useState("");
@@ -8,40 +12,34 @@ function WAindex() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [music, setMusic] = useState("");
 
+  
+  const musicLinks = {
+    Clear: "https://www.youtube.com/embed/RbSUz4zTqnE",
+    Rain: "https://www.youtube.com/embed/253d6y8yxW8",
+    Clouds: "https://www.youtube.com/embed/W3z5XvtUK9o",
+    Snow: "https://www.youtube.com/embed/nvamff8xxo4",
+    Thunderstorm: "https://www.youtube.com/embed/yQNOCwhh5Z4",
+    Drizzle: "https://www.youtube.com/embed/hY8jsdsfnJ0",
+    Mist: "https://www.youtube.com/embed/BGY5w1i41fM"
+  };
+  
+
+
   useEffect(() => {
     if (weatherData && weatherData.weather) {
       const weatherMain = weatherData.weather[0].main;
 
-      // Hava vəziyyətinə görə musiqi URL-ləri
-      switch (weatherMain) {
-        case "Clear":
-          setMusic("https://www.youtube.com/embed/RbSUz4zTqnE"); // Günəşli musiqi
-          break;
-        case "Rain":
-          setMusic("https://www.youtube.com/embed/253d6y8yxW8"); // Yağmurlu musiqi
-          break;
-        case "Clouds":
-          setMusic("https://www.youtube.com/embed/W3z5XvtUK9o"); // Buludlu musiqi
-          break;
-        case "Snow":
-          setMusic("https://www.youtube.com/embed/nvamff8xxo4"); // Qar musiqisi
-          break;
-        case "Thunderstorm":
-          setMusic("https://www.youtube.com/embed/yQNOCwhh5Z4"); // Fırtına musiqisi
-          break;
-        case "Drizzle":
-          setMusic("https://www.youtube.com/embed/hY8jsdsfnJ0"); // Çiskin musiqisi
-          break;
-        case "Mist":
-          setMusic("https://www.youtube.com/embed/BGY5w1i41fM"); // Dumanlı musiqi
-          break;
-        default:
-          setMusic(""); // Varsayılan musiqi
-          break;
+      const musicUrl = musicLinks[weatherMain];
+
+      if (musicUrl) {
+        setMusic(musicUrl);
+      } else {
+        setMusic("");
       }
     }
   }, [weatherData]);
 
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -50,49 +48,60 @@ function WAindex() {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    if (city.length < 3) return;
+  
+  const fetchWeather = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg("");
+      setWeatherData(null);
 
-    const fetchWeather = async () => {
-      try {
-        setLoading(true);
-        setErrorMsg("");
-        setWeatherData(null);
+      const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=az`
+      );
+      const data = await response.json();
 
-        const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=az`
-        );
-        const data = await response.json();
-
-        if (response.ok) {
-          setWeatherData(data);
-        } else if (data.cod === "404") {
-          setErrorMsg("Şəhər tapılmadı. Zəhmət olmasa düzgün daxil edin.");
-        } else {
-          setErrorMsg("Məlumat alınarkən xəta baş verdi.");
-        }
-      } catch (error) {
-        setErrorMsg("Xəta baş verdi. İnterneti və ya API açarını yoxlayın.");
-      } finally {
-        setLoading(false);
+      if (response.ok) {
+        setWeatherData(data);
+      } else if (data.cod === "404") {
+        setErrorMsg("Şəhər tapılmadı. Zəhmət olmasa düzgün daxil edin.");
+      } else {
+        setErrorMsg("Məlumat alınarkən xəta baş verdi.");
       }
-    };
+    } catch (error) {
+      setErrorMsg("Xəta baş verdi. İnterneti və ya API açarını yoxlayın.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchWeather();
-  }, [city]);
+  
+  const onSubmit = (e) => {
+    e.preventDefault(); 
+    if (city.length < 3) return; 
+    setWeatherData(null); 
+    setErrorMsg(""); 
+    fetchWeather(); 
+  };
 
+  
   const weatherClass = weatherData?.weather[0]?.main || "";
 
   return (
     <>
       <div>
         <h1 className="weather-header">🌦️ WEATHER APP</h1>
-        <input
-          type="text"
-          placeholder="Şəhəri daxil edin"
-          onChange={(e) => setCity(e.target.value)}
+        <form onSubmit={onSubmit}>
+        <Input  
+               variant="filled"
+               placeholder="Şəhəri daxil edin"
+               value={city}
+               onChange={(e) => setCity(e.target.value)} 
         />
+          <Button color="cyan" variant="filled" htmlType="submit" >
+            Axtar
+          </Button>
+        </form>
       </div>
 
       {loading && <p>⏳ Yüklənir...</p>}
@@ -116,17 +125,18 @@ function WAindex() {
               alt="icon"
             />
 
-            {/* YouTube Embed Musiqi Player */}
+            {/* Musiqi oynadıcı */}
             {music && (
               <iframe
-                width="100%"
-                height="400"
-                src={music}
-                title="Musiqi"
-                frameBorder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              width="100%"
+              height="400"
+              src={music}
+              title="Musiqi"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+            
             )}
           </div>
         </div>
