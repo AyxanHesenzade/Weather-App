@@ -1,49 +1,124 @@
 #root {
   display: block;
   text-align: center;
+  background-color: rgba(37, 35, 35, 1);
+  color: white;
+  
 }
 
-.weather-card-p{
+.special-gothic-expanded-one-regular {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.comfortaa-uniquifier {
+  font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
+.weather-header {
+  display: flex;
+  margin: 10px 20px;
+  padding: 10px 20px;
+  gap: 20px;
+  
+}
+
+.Search-Bar{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: black;
+}
+.Searc-Bar-Input{
+  background-color: rgba(217, 217, 217, 1);
+}
+
+/* Hover zamanı */
+.Searc-Bar-Input:hover {
+  border-color: #22724d !important;
+  background-color: #ffffff !important;
+}
+
+/* Fokus zamanı */
+.Searc-Bar-Input:focus,
+.Searc-Bar-Input:focus-within,
+.Searc-Bar-Input:focus-visible {
+  border-color: #22724d !important;
+  box-shadow: 0 0 0 2px rgba(18, 79, 32, 0.2) !important;
+  background-color: #ffffff !important;
+}
+
+.Search-Bar-Button{
+  background-color:rgba(217, 217, 217, 1) !important; 
+  color: black !important;
+}
+.Search-Bar-Button:hover {
+  border-color: #22724d !important;
+  background-color: #ffffff !important;
+
+}
+.iconsearch{
+  height: 20px;
+  width: 20px;
+}
+
+
+.weather-card{
+  margin: 0 auto;
+  max-width: 817px;
+  height: 415px;
+  border-radius: 24px;
+  background: linear-gradient(
+  135deg,
+  rgba(173, 54, 203, 1) 0%,      /* 1-ci rəng başlanğıcı */
+  rgba(173, 54, 203, 1) 33%,     /* 1-ci rəng bitişi */
+  rgba(112, 52, 127, 1) 50%,     /* qarışıq rəng (istəyə uyğun dəyişdirilə bilər) */
+  rgba(51, 51, 51, 1) 80%,       /* 2-ci rəng başlayır */
+  rgba(51, 51, 51, 1) 100%       /* 2-ci rəng bitir */
+);  
+}
+
+.Card-Header{
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 10px;
+}
+
+.Temperature {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:10px ;
+  font-size: 20pt;
+}
+
+.Date {
+  display: flex;
+  margin-left: 10px;
+}
+
+.Card-Footer{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 60px;
+}
+
+.Card-Footer-Div {
+  border: 2px;
+  border-radius: 24px;
+  border-color: #ffffff;
+
+}
+
+.Music-Player{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  align-content: space-around;
-  background-color: aqua;
-  border-radius: 24px;
+  align-items: center;
+
 }
 
-.weather-header {
-  background-color: aqua;
-  color: azure;
-  border-radius: 24px;
-}
-.weather-card{
-  border-radius: 24px;
-}
 
-.weather-card.Clear {
-  background-color: #ffe066;
-}
-.weather-card.Rain {
-  background-color: #a3d5ff;
-}
-.weather-card.Clouds {
-  background-color: #d3d3d3;
-}
-.weather-card.Snow {
-  background-color: #f0f8ff;
-}
-.weather-card.Thunderstorm {
-  background-color: #a29bfe;
-}
-.weather-card.Drizzle {
-  background-color: #b2bec3;
-}
-.weather-card.Mist {
-  background-color: #dfe6e9;
-}
-
-.weather-card-p p {
-  margin: 5px 0;
-}
